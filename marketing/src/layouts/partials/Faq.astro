@@ -1,0 +1,70 @@
+---
+const faqs = [
+  {
+    id: 1,
+    question: "Can I use the app without an internet connection?",
+    answer:
+      "Yes, the app is designed to be fully functional offline, allowing you to track habits, journal, and use the Pomodoro timer without needing an internet connection.",
+  },
+  {
+    id: 2,
+    question: "How can I customize the Pomodoro timer to fit my work style?",
+    answer:
+      "You can easily adjust the focus and break intervals in the app's settings to match your personal productivity rhythm and enhance your work sessions.",
+  },
+  {
+    id: 3,
+    question: "Is there a limit to the number of habits I can track?",
+    answer:
+      "No, the app allows you to track as many habits as you'd like. We believe in supporting your growth without limitations.",
+  },
+  {
+    id: 4,
+    question: "Can I export my notes and habit tracking data?",
+    answer:
+      "Absolutely! You can export your journal entries and habit tracking data as a backup or for personal review outside the app.",
+  },
+  {
+    id: 5,
+    question: "What makes your pricing model simple and transparent?",
+    answer:
+      "The pricing is straightforward with no hidden fees or unexpected charges. You pay for what you see, ensuring you get full value without surprises.",
+  },
+  {
+    id: 6,
+    question: "How can I share my progress with friends or a community?",
+    answer:
+      "While the app primarily functions offline, you can manually share your progress screenshots or exported data with friends or online communities whenever you're connected to the internet.",
+  },
+];
+---
+
+<section id="faq">
+  <div class="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
+    <h2 class="text-2xl font-bold leading-10 tracking-tight">
+      Frequently asked questions
+    </h2>
+    <p class="mt-6 max-w-2xl text-base leading-7" >
+      Have a different question and can’t find the answer you’re looking for?
+      <a href="https://twitter.com/embuxmann" target="_blank" class="font-semibold">Send me a message </a>
+    </p>
+    <div class="mt-20">
+      <dl
+        class="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:grid-cols-3 lg:gap-x-10"
+      >
+        {
+          faqs.map((faq) => (
+            <div>
+              <dt class="text-base font-semibold leading-7 text-gray-900">
+                {faq.question}
+              </dt>
+              <dd class="mt-2 text-base leading-7 text-gray-600">
+                {faq.answer}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

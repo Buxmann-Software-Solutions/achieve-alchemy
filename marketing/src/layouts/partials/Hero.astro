@@ -1,0 +1,82 @@
+---
+import { FaTwitter, FaReddit } from "react-icons/fa";
+import { FaGift } from "react-icons/fa6";
+import { Icon } from "astro-icon/components";
+import { Image } from 'astro:assets';
+import habitImage from "@/assets/images/habits.png";
+---
+
+<div id="hero" class="relative isolate overflow-hidden">
+  <div
+    class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-16"
+  >
+    <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
+      <div class="mt-16 sm:mt-32 lg:mt-16">
+        <h1
+          class="text-4xl mt-3 font-bold tracking-tight text-gray-900 sm:text-6xl"
+        >
+          Transform Your Daily Habits and Boost Productivity
+        </h1>
+      </div>
+      <p class="mt-6 text-lg leading-8 text-gray-600">
+        Improve your daily routines and productivity with the app, featuring habit tracking, journaling, and a Pomodoro timer for better focus.      </p>
+      <div class="mt-14 items-center gap-x-6">
+        <div class="mb-3 font-bold text-md">Register for early access</div>
+        <div class="w-full md:w-[80%]">
+          <iframe
+            src="https://embeds.beehiiv.com/73e9d242-7eff-47ff-9508-752ad2fd5878?slim=true"
+            data-test-id="beehiiv-embed"
+            height="52"
+            width="100%"
+            frameborder="0"
+            scrolling="no"
+            style="margin: 0; border-radius: 0px !important; background-color: transparent;"
+          ></iframe>
+        </div>
+        <button
+          class="border-[1px] hidden rounded-md py-3 px-5 bg-black text-white font-semibold shadow-sm w-[200px]"
+          >Download</button
+        >
+      </div>
+      <div class="mt-2 space-x-2 items-center hidden">
+        <FaGift />
+        <div class="font-semibold text-sm">
+          50% off for the first 10 customers
+        </div>
+      </div>
+      <div class="mt-14 space-y-3 hidden">
+        <div class="font-semibold">Featured on</div>
+        <div class="flex items-center space-x-5">
+          <div class="flex space-x-2 items-center">
+            <FaTwitter size={30} className="text-black" />
+            <div class="font-semibold">Twitter</div>
+          </div>
+          <div class="flex space-x-2 items-center">
+            <FaReddit size={30} className="text-black" />
+            <div class="font-semibold">Reddit</div>
+          </div>
+          <div class="flex space-x-2 items-center">
+            <Icon name="product-hunt" size={30} color="black" />
+            <div class="font-semibold">Product Hunt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32"
+    >
+      <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
+        <div
+          class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4"
+        >
+          <Image
+            src={habitImage}
+            alt="App screenshot"
+            loading="eager"
+            class="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

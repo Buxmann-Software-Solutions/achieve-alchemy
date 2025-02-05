@@ -1,0 +1,20 @@
+{
+  "site": {
+    "title": "AchieveAlchemy",
+    "base_url": "https://AchieveAlchemy.com",
+    "base_path": "/",
+    "trailing_slash": false,
+    "favicon": "/images/favicon.png",
+    "logo_text": "AchieveAlchemy"
+  },
+
+  "settings": {
+    "summary_length": 200
+  },
+
+  "metadata": {
+    "meta_author": "AchieveAlchemy",
+    "meta_image": "/images/habits.png",
+    "meta_description": "Discover AchieveAlchemy, your ultimate tool for personal development and productivity. Transform habits, boost efficiency, and achieve your goals with the app's innovative features, all designed for your success. Start your journey today!"
+  }
+}

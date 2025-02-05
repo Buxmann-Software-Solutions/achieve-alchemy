@@ -1,0 +1,6 @@
+-- Your SQL goes here
+CREATE TABLE habit_completions (
+  id VARCHAR(50) PRIMARY KEY NOT NULL,
+  habit_id VARCHAR(50) NOT NULL REFERENCES habits(id),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)

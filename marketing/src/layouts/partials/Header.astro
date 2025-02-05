@@ -1,0 +1,73 @@
+---
+import Logo from "@/components/Logo.astro";
+import config from "@/config/config.json";
+
+export interface ChildNavigationLink {
+  name: string;
+  url: string;
+}
+
+export interface NavigationLink {
+  name: string;
+  url: string;
+  hasChildren?: boolean;
+  children?: ChildNavigationLink[];
+}
+
+const main = [
+  {
+    name: "Features",
+    url: "/#features",
+  },
+  {
+    name: "Faq",
+    url: "/#faq",
+  },
+];
+
+const { settings } = config;
+const { pathname } = Astro.url;
+---
+
+<header
+  class={`header max-w-7xl mx-auto z-30 bg-white ${settings.sticky_header && "sticky top-0"}`}
+>
+  <nav class="flex py-4 justify-between items-center container">
+    <!-- logo -->
+    <div class="order-0">
+      <Logo />
+    </div>
+
+    <ul
+      id="nav-menu"
+      class="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
+    >
+      {
+        main.map((menu) => (
+          <li class="nav-item">
+            <a
+              href={menu.url}
+              class={`nav-link block font-semibold ${
+                (pathname === `${menu.url}/` || pathname === menu.url) &&
+                "active"
+              }`}
+            >
+              {menu.name}
+            </a>
+          </li>
+        ))
+      }
+      <li class="mt-4 inline-block lg:hidden">
+        <a class="btn btn-outline-primary btn-sm" href="">Download</a>
+      </li>
+    </ul>
+    <div class="order-1 ml-auto items-center md:order-2 lg:ml-0 hidden sm:flex">
+     <a href="/#hero">
+     <button
+        class="border-[1px] rounded-md py-2 px-5 hover:bg-black hover:text-white font-semibold shadow-sm"
+        >Early Access
+        </button>
+      </a>
+    </div>
+  </nav>
+</header>
