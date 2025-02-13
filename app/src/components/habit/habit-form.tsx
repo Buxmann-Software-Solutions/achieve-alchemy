@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { icons } from "lucide-react";
-// import { RouterOutputs } from "~/lib/trpc";
 
 const habitFormSchema = z.object({
   title: z.string().min(4, {
@@ -19,7 +18,6 @@ const habitFormSchema = z.object({
 });
 
 export type HabitFormValues = z.infer<typeof habitFormSchema>;
-// type Habit = RouterOutputs["habit"]["listActive"][0];
 
 interface HabitFormProps {
   className?: string;

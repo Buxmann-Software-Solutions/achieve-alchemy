@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { HabitForm, HabitFormValues } from "@/components/habit/habit-form";
-import { toast } from "sonner";
-import { AlertTriangle, CheckCircle } from "lucide-react";
 import {
   Sheet,
   SheetContent,

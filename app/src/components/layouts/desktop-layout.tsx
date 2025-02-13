@@ -1,15 +1,7 @@
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import {
-  Timer,
-  Bird,
-  ArrowRight,
-  NotebookPen,
-  Moon,
-  Sun,
-  Home,
-} from "lucide-react";
+import { Timer, Bird, ArrowRight, Moon, Sun } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useSetAtom } from "jotai/react";
@@ -21,11 +13,8 @@ interface DesktopLayoutProps {
 }
 
 enum NavItemType {
-  DASHBOARD = "/",
-  HABITS = "habits",
+  HABITS = "/",
   POMODORO = "pomodoro",
-  SETTINGS = "settings",
-  NOTES = "notes",
 }
 
 export const DesktopLayout = ({ children }: DesktopLayoutProps) => {
@@ -47,11 +36,6 @@ const SideBar = () => {
 
   const navItems = [
     {
-      id: NavItemType.DASHBOARD,
-      label: "Dashboard",
-      icon: Home,
-    },
-    {
       id: NavItemType.HABITS,
       label: "Habits",
       icon: Bird,
@@ -60,11 +44,6 @@ const SideBar = () => {
       id: NavItemType.POMODORO,
       label: "Pomodoro",
       icon: Timer,
-    },
-    {
-      id: NavItemType.NOTES,
-      label: "Notes",
-      icon: NotebookPen,
     },
   ];
 

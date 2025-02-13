@@ -2,14 +2,7 @@ import { useToggleHabitCompletion } from "@/hooks/use-toggle-habit-completion";
 import { useGetHabitCompletions } from "@/hooks/habit/use-get-habit-completions";
 import { useTheme } from "@/providers/theme-provider";
 import HeatMap, { HeatMapValue } from "@uiw/react-heat-map";
-import {
-  endOfDay,
-  endOfWeek,
-  format,
-  formatISO,
-  isSameDay,
-  subWeeks,
-} from "date-fns";
+import { endOfDay, endOfWeek, format, formatISO, subWeeks } from "date-fns";
 import { toast } from "sonner";
 import { HabitCompletion } from "@/bindings";
 

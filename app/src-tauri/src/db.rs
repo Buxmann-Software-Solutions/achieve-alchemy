@@ -1,39 +1,57 @@
-use std::fs;
-use std::path::Path;
+use diesel::{
+    r2d2::{ConnectionManager, Pool},
+    sqlite::SqliteConnection,
+    Connection,
+};
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+use std::{fs, path::PathBuf};
+use tauri::{App, Manager};
 
-// Check if a database file exists, and create one if it does not.
-pub fn init() {
-    if !db_file_exists() {
-        create_db_file();
+const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
+
+pub fn setup_db(app: &App) -> Pool<ConnectionManager<SqliteConnection>> {
+    let mut path = app
+        .path()
+        .app_data_dir()
+        .expect("Failed to get application data directory");
+
+    println!("Setting up database at: {}", path.display());
+
+    // Create data directory if needed
+    if !path.exists() {
+        fs::create_dir_all(&path).expect("Failed to create data directory");
     }
-}
 
-// Create the database file.
-fn create_db_file() {
-    let db_path = get_test_db_path();
-    let db_dir = Path::new(&db_path).parent().unwrap();
+    path.push("db.sqlite");
 
-    // If the parent directory does not exist, create it.
-    if !db_dir.exists() {
-        fs::create_dir_all(db_dir).unwrap();
+    // Initialize database file and run migrations
+    if !path.exists() {
+        create_db_file(&path);
     }
+    run_migrations(&path);
 
-    // Create the database file.
-    fs::File::create(db_path).unwrap();
+    // Set up connection pool
+    let database_url = path.to_str().expect("Invalid database path");
+    let manager = ConnectionManager::<SqliteConnection>::new(database_url);
+    Pool::builder()
+        .build(manager)
+        .expect("Failed to create database connection pool")
 }
 
-// Check whether the database file exists.
-fn db_file_exists() -> bool {
-    let db_path = get_test_db_path();
-    Path::new(&db_path).exists()
+fn create_db_file(path: &PathBuf) {
+    if let Some(parent) = path.parent() {
+        if !parent.exists() {
+            fs::create_dir_all(parent).expect("Failed to create database directory");
+        }
+    }
+    fs::File::create(path).expect("Failed to create database file");
 }
 
-pub fn get_test_db_path() -> String {
-    String::from("../db.sqlite")
-}
-
-// Get the path where the database file should be located.
-pub fn get_db_path() -> String {
-    let home_dir = dirs::data_dir().unwrap();
-    home_dir.to_str().unwrap().to_string() + "/achievealchemy/database.sqlite"
+fn run_migrations(path: &PathBuf) {
+    let database_url = path.to_str().expect("Invalid database path");
+    let mut connection =
+        SqliteConnection::establish(database_url).expect("Failed to connect to database");
+    connection
+        .run_pending_migrations(MIGRATIONS)
+        .expect("Failed to run database migrations");
 }

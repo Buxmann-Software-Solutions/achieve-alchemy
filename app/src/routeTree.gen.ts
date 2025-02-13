@@ -11,14 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as HabitsImport } from './routes/habits'
+import { Route as PomodoroImport } from './routes/pomodoro'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
-const HabitsRoute = HabitsImport.update({
-  id: '/habits',
-  path: '/habits',
+const PomodoroRoute = PomodoroImport.update({
+  id: '/pomodoro',
+  path: '/pomodoro',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,11 +39,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/habits': {
-      id: '/habits'
-      path: '/habits'
-      fullPath: '/habits'
-      preLoaderRoute: typeof HabitsImport
+    '/pomodoro': {
+      id: '/pomodoro'
+      path: '/pomodoro'
+      fullPath: '/pomodoro'
+      preLoaderRoute: typeof PomodoroImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +53,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/habits': typeof HabitsRoute
+  '/pomodoro': typeof PomodoroRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/habits': typeof HabitsRoute
+  '/pomodoro': typeof PomodoroRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/habits': typeof HabitsRoute
+  '/pomodoro': typeof PomodoroRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/habits'
+  fullPaths: '/' | '/pomodoro'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/habits'
-  id: '__root__' | '/' | '/habits'
+  to: '/' | '/pomodoro'
+  id: '__root__' | '/' | '/pomodoro'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  HabitsRoute: typeof HabitsRoute
+  PomodoroRoute: typeof PomodoroRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  HabitsRoute: HabitsRoute,
+  PomodoroRoute: PomodoroRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +97,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/habits"
+        "/pomodoro"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/habits": {
-      "filePath": "habits.tsx"
+    "/pomodoro": {
+      "filePath": "pomodoro.tsx"
     }
   }
 }

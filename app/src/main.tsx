@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "@/globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { PomodoroProvider } from "@/stores/PomodoroContext";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -26,7 +27,9 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ReactQueryProvider>
         <ThemeProvider>
-          <RouterProvider router={router} />
+          <PomodoroProvider>
+            <RouterProvider router={router} />
+          </PomodoroProvider>
         </ThemeProvider>
       </ReactQueryProvider>
     </StrictMode>
