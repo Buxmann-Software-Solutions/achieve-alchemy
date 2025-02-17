@@ -26,7 +26,7 @@ To get started with the project, follow these steps:
    - [Diesel](https://diesel.rs/)
    - [React](https://reactjs.org/)
 
-## License
+# License
 
 This project is licensed under the MIT License
 
