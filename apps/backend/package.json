@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "deploy": "bun run src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:up": "drizzle-kit up",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@hono/trpc-server": "^0.3.4",
+    "@opennextjs/cloudflare": "^0.5.1",
+    "@types/bun": "^1.2.2",
+    "better-auth": "^1.1.18",
+    "cloudflare-pages-plugin-trpc": "^0.3.2",
+    "drizzle-kit": "^0.30.4",
+    "drizzle-orm": "^0.39.3",
+    "hono": "^4.7.1",
+    "pg": "^8.13.3",
+    "superjson": "^2.2.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250109.0",
+    "@types/pg": "^8.11.11",
+    "wrangler": "^3.101.0"
+  }
+}

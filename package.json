@@ -1,0 +1,13 @@
+{
+  "name": "achievealchemy-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@xstate/react": "^5.0.2",
+    "xstate": "^5.19.2"
+  }
+}
