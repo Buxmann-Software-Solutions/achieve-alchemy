@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { usePomodoro } from "@/hooks/use-pomodoro";
+import { usePomodoro } from "@/contexts/PomodoroContext";
 
 interface PomodoroPreferenceFormProps {
   className?: string;
@@ -29,7 +29,7 @@ export function PomodoroPreferenceForm({
   className = "",
   onRequestClose,
 }: PomodoroPreferenceFormProps) {
-  const { settings, updateSettings } = usePomodoro();
+  const { settings, send } = usePomodoro();
 
   const {
     register,
@@ -39,7 +39,7 @@ export function PomodoroPreferenceForm({
     resolver: zodResolver(pomodoroPreferenceFormSchema),
     defaultValues: {
       focusDuration: settings.focusDuration / (60 * 1000), // Convert ms to minutes
-      shortBreakDuration: settings.shortBreakDuration / (61 * 1000),
+      shortBreakDuration: settings.shortBreakDuration / (60 * 1000), // Fixed typo in divisor
       longBreakDuration: settings.longBreakDuration / (60 * 1000),
       sessionsUntilLongBreak: settings.sessionsUntilLongBreak,
       autoStartBreaks: settings.autoStartBreaks,
@@ -48,13 +48,16 @@ export function PomodoroPreferenceForm({
   });
 
   const onSubmit = (data: PomodoroPreferenceFormValues) => {
-    updateSettings({
-      focusDuration: data.focusDuration * 60 * 1000, // Convert minutes to ms
-      shortBreakDuration: data.shortBreakDuration * 60 * 1000,
-      longBreakDuration: data.longBreakDuration * 60 * 1000,
-      sessionsUntilLongBreak: data.sessionsUntilLongBreak,
-      autoStartBreaks: data.autoStartBreaks,
-      autoStartPomodoros: data.autoStartPomodoros,
+    send({
+      type: "UPDATE_SETTINGS",
+      settings: {
+        focusDuration: data.focusDuration * 60 * 1000, // Convert minutes to ms
+        shortBreakDuration: data.shortBreakDuration * 60 * 1000,
+        longBreakDuration: data.longBreakDuration * 60 * 1000,
+        sessionsUntilLongBreak: data.sessionsUntilLongBreak,
+        autoStartBreaks: data.autoStartBreaks,
+        autoStartPomodoros: data.autoStartPomodoros,
+      },
     });
     onRequestClose();
   };

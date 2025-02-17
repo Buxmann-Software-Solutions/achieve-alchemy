@@ -1,7 +1,9 @@
 import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
+import { routerOutput, trpc } from "@/lib/trpc";
+
+export type PomodoroCycle = routerOutput["pomodoro"]["getCurrentCycle"];
 
 export function useGetCurrentCycle() {
   const query = trpc.pomodoro.getCurrentCycle.useQuery();

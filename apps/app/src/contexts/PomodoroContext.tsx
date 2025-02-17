@@ -1,23 +1,19 @@
-import { createContext, useContext, useCallback, ReactNode } from "react";
+import { createContext, useContext, ReactNode } from "react";
 import { useMachine } from "@xstate/react";
-import { toast } from "sonner";
-import { PomodoroEvent, PomodoroState } from "../machines/PomodoroMachine";
-import { pomodoroMachine } from "../machines/PomodoroMachine";
+import {
+  PomodoroEvent,
+  PomodoroState,
+  pomodoroMachine,
+} from "../machines/PomodoroMachine";
 
-export enum PomodoroMode {
-  FOCUS = "FOCUS",
-  SHORT_BREAK = "SHORT_BREAK",
-  LONG_BREAK = "LONG_BREAK",
+interface PomodoroContextType {
+  state: PomodoroState;
+  send: (event: PomodoroEvent) => void;
 }
 
-// Create Context
-const PomodoroContext = createContext<
-  | {
-      state: PomodoroState;
-      send: (event: PomodoroEvent) => void;
-    }
-  | undefined
->(undefined);
+const PomodoroContext = createContext<PomodoroContextType | undefined>(
+  undefined
+);
 
 export function PomodoroProvider({ children }: { children: ReactNode }) {
   const [state, send] = useMachine(pomodoroMachine);
@@ -42,32 +38,6 @@ export function usePomodoro() {
 
   const { state, send } = context;
 
-  const startOrResumeTimer = useCallback(() => {
-    if (state.matches("paused")) {
-      send({ type: "RESUME" });
-      toast.success("Timer resumed");
-    } else if (state.matches("idle")) {
-      send({ type: "START" });
-      toast.success("Pomodoro session started!");
-    }
-  }, [state, send]);
-
-  const pauseTimer = useCallback(() => {
-    send({ type: "PAUSE" });
-  }, [send]);
-
-  const stopTimer = useCallback(() => {
-    send({ type: "STOP" });
-    toast.success("Session abandoned");
-  }, [send]);
-
-  const updateSettings = useCallback(
-    (settings: Partial<PomodoroState["context"]["settings"]>) => {
-      send({ type: "UPDATE_SETTINGS", settings });
-    },
-    [send]
-  );
-
   const getMode = () => {
     if (state.matches("focus")) return "Focus";
     if (state.matches("shortBreak")) return "Short Break";
@@ -76,14 +46,26 @@ export function usePomodoro() {
   };
 
   return {
-    timeLeft: state.context.timeLeft,
-    startOrResumeTimer,
-    pauseTimer,
-    stopTimer,
-    isPaused: state.matches("paused"),
+    state,
+    send,
     mode: getMode(),
     completedSessions: state.context.completedSessions,
     settings: state.context.settings,
-    updateSettings,
+    timeLeft: formatTime(state.context.timeLeft),
   };
+}
+
+/**
+ * Formats time in milliseconds to MM:SS format
+ */
+function formatTime(totalMilliseconds: number): string {
+  if (isNaN(totalMilliseconds) || totalMilliseconds <= 0) {
+    return "00:00";
+  }
+
+  const totalSeconds = Math.floor(totalMilliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }

@@ -1,10 +1,8 @@
 import { toast } from "sonner";
-import { assign, fromCallback, StateFrom } from "xstate";
-
-import { createMachine } from "xstate";
+import { assign, fromCallback, StateFrom, createMachine } from "xstate";
 
 // Pomodoro Settings
-interface PomodoroSettings {
+export interface PomodoroSettings {
   focusDuration: number;
   shortBreakDuration: number;
   longBreakDuration: number;
@@ -17,27 +15,23 @@ interface PomodoroSettings {
 type PomodoroContext = {
   settings: PomodoroSettings;
   completedSessions: number;
-  currentCycleId?: string;
-  currentSessionId?: string;
   timeLeft: number;
 };
 
 export type PomodoroEvent =
   | { type: "START" }
+  | { type: "RESTART" }
   | { type: "PAUSE" }
   | { type: "RESUME" }
-  | { type: "STOP" }
+  | { type: "ABANDON" }
   | { type: "TICK" }
-  | { type: "SESSION_COMPLETE" }
-  | { type: "UPDATE_SETTINGS"; settings: Partial<PomodoroSettings> }
-  | { type: "SET_CYCLE_ID"; cycleId: string }
-  | { type: "SET_SESSION_ID"; sessionId: string };
+  | { type: "UPDATE_SETTINGS"; settings: Partial<PomodoroSettings> };
 
 const DEFAULT_SETTINGS: PomodoroSettings = {
-  focusDuration: 20 * 1000, // 20 seconds in ms
-  shortBreakDuration: 5 * 1000, // 5 seconds in ms
-  longBreakDuration: 15 * 1000, // 15 seconds in ms
-  sessionsUntilLongBreak: 1,
+  focusDuration: 25 * 60 * 1000, // 25 minutes in ms
+  shortBreakDuration: 5 * 60 * 1000, // 5 minutes in ms
+  longBreakDuration: 15 * 60 * 1000, // 15 minutes in ms
+  sessionsUntilLongBreak: 4,
   autoStartBreaks: true,
   autoStartPomodoros: true,
 };
@@ -56,12 +50,9 @@ export const pomodoroMachine = createMachine(
       timeLeft: DEFAULT_SETTINGS.focusDuration,
     },
     on: {
-      UPDATE_SETTINGS: {
-        actions: ["updateSettings", "adjustTimeLeft"],
-      },
-      STOP: {
-        target: ".paused",
-        actions: ["resetTimer"],
+      ABANDON: {
+        target: ".idle",
+        actions: ["resetEverything"],
       },
     },
     states: {
@@ -70,16 +61,22 @@ export const pomodoroMachine = createMachine(
         on: {
           START: {
             target: "focus",
-            actions: ["resetTimer"],
+            actions: ["startCycle"],
+          },
+          UPDATE_SETTINGS: {
+            actions: ["updateSettings", "adjustTimeLeft"],
           },
         },
       },
       focus: {
-        entry: ["setFocusDuration"],
         invoke: {
           src: "timer",
         },
         on: {
+          RESTART: {
+            target: "focus",
+            actions: ["resetTimer"],
+          },
           PAUSE: "paused",
           TICK: [
             {
@@ -89,18 +86,39 @@ export const pomodoroMachine = createMachine(
             {
               guard: "shouldTakeShortBreak",
               target: "shortBreak",
-              actions: ["incrementCompletedSessions", "notifyTimeUp"],
+              actions: [
+                "incrementCompletedSessions",
+                "notifyTimeUp",
+                "setShortBreakDuration",
+              ],
             },
             {
               guard: "shouldTakeLongBreak",
               target: "longBreak",
-              actions: ["incrementCompletedSessions", "notifyTimeUp"],
+              actions: [
+                "incrementCompletedSessions",
+                "notifyTimeUp",
+                "setLongBreakDuration",
+              ],
             },
           ],
         },
       },
+      paused: {
+        on: {
+          RESTART: {
+            target: "focus",
+            actions: ["resetTimer"],
+          },
+          RESUME: {
+            target: "focus",
+          },
+          START: {
+            target: "focus",
+          },
+        },
+      },
       shortBreak: {
-        entry: ["setShortBreakDuration"],
         invoke: {
           src: "timer",
         },
@@ -114,13 +132,12 @@ export const pomodoroMachine = createMachine(
             {
               guard: "hasNoTimeLeft",
               target: "focus",
-              actions: ["notifyTimeUp"],
+              actions: ["notifyTimeUp", "setFocusDuration"],
             },
           ],
         },
       },
       longBreak: {
-        entry: ["setLongBreakDuration"],
         invoke: {
           src: "timer",
         },
@@ -137,17 +154,6 @@ export const pomodoroMachine = createMachine(
               actions: ["notifyTimeUp", "notifyCycleComplete"],
             },
           ],
-        },
-      },
-      paused: {
-        on: {
-          RESUME: {
-            target: "focus",
-          },
-          START: {
-            target: "focus",
-            actions: ["resetTimer"],
-          },
         },
       },
     },
@@ -171,8 +177,9 @@ export const pomodoroMachine = createMachine(
       resetEverything: assign({
         completedSessions: 0,
         timeLeft: ({ context }) => context.settings.focusDuration,
-        currentCycleId: undefined,
-        currentSessionId: undefined,
+      }),
+      startCycle: assign({
+        timeLeft: ({ context }) => context.settings.focusDuration,
       }),
       notifyTimeUp: () => {
         toast.success("Time's up!");
@@ -192,29 +199,30 @@ export const pomodoroMachine = createMachine(
       adjustTimeLeft: assign({
         timeLeft: ({ context, event }) => {
           if (event.type !== "UPDATE_SETTINGS") return context.timeLeft;
-          // If we're in focus mode, update to new focus duration
+
+          const newSettings = {
+            ...context.settings,
+            ...event.settings,
+          };
+
+          // If we're in focus mode or about to start, update to new focus duration
           if (context.timeLeft === context.settings.focusDuration) {
-            return (
-              event.settings.focusDuration ?? context.settings.focusDuration
-            );
+            return newSettings.focusDuration;
           }
           // If we're in short break, update to new short break duration
           if (context.timeLeft === context.settings.shortBreakDuration) {
-            return (
-              event.settings.shortBreakDuration ??
-              context.settings.shortBreakDuration
-            );
+            return newSettings.shortBreakDuration;
           }
           // If we're in long break, update to new long break duration
           if (context.timeLeft === context.settings.longBreakDuration) {
-            return (
-              event.settings.longBreakDuration ??
-              context.settings.longBreakDuration
-            );
+            return newSettings.longBreakDuration;
           }
           // Otherwise keep current time
           return context.timeLeft;
         },
+      }),
+      startTimer: assign({
+        timeLeft: ({ context }) => context.settings.focusDuration,
       }),
       resetTimer: assign({
         timeLeft: ({ context }) => context.settings.focusDuration,

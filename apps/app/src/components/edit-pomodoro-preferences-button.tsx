@@ -21,7 +21,6 @@ import {
 } from "./ui/drawer";
 import { SlidersHorizontal } from "lucide-react";
 import { PomodoroPreferenceForm } from "@/components/pomodoro-form";
-import { usePomodoro } from "@/hooks/use-pomodoro";
 import {
   Tooltip,
   TooltipContent,
@@ -29,12 +28,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { usePomodoro } from "@/contexts/PomodoroContext";
 
 export function EditPomodoroPreferencesButton() {
   const [isOpen, setIsOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const { isPaused } = usePomodoro();
-  const isRunning = !isPaused;
+  const { state } = usePomodoro();
+  const isIdle = state.matches("idle");
+  const isRunning = !isIdle;
 
   if (isRunning) {
     return (

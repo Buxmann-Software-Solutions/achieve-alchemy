@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Pause, Play, TimerOff, TimerReset } from "lucide-react";
 import { PageLayout } from "@/components/layouts/page-layout";
-import { usePomodoro } from "@/hooks/use-pomodoro";
 import { Button } from "@/components/ui/button";
 import { EditPomodoroPreferencesButton } from "@/components/edit-pomodoro-preferences-button";
+import { usePomodoro } from "@/contexts/PomodoroContext";
 
 export const Route = createFileRoute("/pomodoro")({
   component: PomodoroComponent,
@@ -18,17 +18,11 @@ function PomodoroComponent() {
 }
 
 function Pomodoro() {
-  const {
-    mode,
-    timeLeft,
-    startOrResumeTimer,
-    pauseTimer,
-    isPaused,
-    abandonSession,
-    completedSessions,
-    restartSession,
-    settings,
-  } = usePomodoro();
+  const { mode, timeLeft, completedSessions, settings, send, state } =
+    usePomodoro();
+
+  const isIdle = state.matches("idle");
+  const isPaused = state.matches("paused");
 
   return (
     <div className="h-full flex flex-col">
@@ -46,25 +40,31 @@ function Pomodoro() {
             <Button
               size="icon"
               variant="ghost"
-              onClick={restartSession}
+              disabled={isIdle}
               title="Restart session"
+              onClick={() => send({ type: "RESTART" })}
             >
               <TimerReset />
             </Button>
             <Button
               size="icon"
               variant="ghost"
-              onClick={() => (isPaused ? startOrResumeTimer() : pauseTimer())}
-              title={isPaused ? "Start timer" : "Pause timer"}
+              onClick={() =>
+                isPaused || isIdle
+                  ? send({ type: "START" })
+                  : send({ type: "PAUSE" })
+              }
+              title={isPaused || isIdle ? "Start timer" : "Pause timer"}
             >
-              {isPaused ? <Play /> : <Pause />}
+              {isPaused || isIdle ? <Play /> : <Pause />}
             </Button>
             <EditPomodoroPreferencesButton />
             <Button
-              variant="ghost"
               size="icon"
-              onClick={abandonSession}
+              variant="ghost"
+              disabled={isIdle}
               title="Abandon session"
+              onClick={() => send({ type: "ABANDON" })}
             >
               <TimerOff />
             </Button>
