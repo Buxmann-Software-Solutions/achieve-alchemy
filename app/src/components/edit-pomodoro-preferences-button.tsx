@@ -21,7 +21,7 @@ import {
 } from "./ui/drawer";
 import { SlidersHorizontal } from "lucide-react";
 import { PomodoroPreferenceForm } from "@/components/pomodoro-form";
-import { usePomodoro } from "@/stores/PomodoroContext";
+import { usePomodoro } from "@/contexts/PomodoroContext";
 import {
   Tooltip,
   TooltipContent,

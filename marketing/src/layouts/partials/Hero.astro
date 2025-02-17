@@ -2,8 +2,9 @@
 import { FaTwitter, FaReddit } from "react-icons/fa";
 import { FaGift } from "react-icons/fa6";
 import { Icon } from "astro-icon/components";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 import habitImage from "@/assets/images/habits.png";
+import { Button } from "@/shortcodes/Button";
 ---
 
 <div id="hero" class="relative isolate overflow-hidden">
@@ -19,24 +20,19 @@ import habitImage from "@/assets/images/habits.png";
         </h1>
       </div>
       <p class="mt-6 text-lg leading-8 text-gray-600">
-        Improve your daily routines and productivity with the app, featuring habit tracking, journaling, and a Pomodoro timer for better focus.      </p>
+        Improve your daily routines and productivity with the app, featuring
+        habit tracking, journaling, and a Pomodoro timer for better focus.
+      </p>
       <div class="mt-14 items-center gap-x-6">
-        <div class="mb-3 font-bold text-md">Register for early access</div>
-        <div class="w-full md:w-[80%]">
-          <iframe
-            src="https://embeds.beehiiv.com/73e9d242-7eff-47ff-9508-752ad2fd5878?slim=true"
-            data-test-id="beehiiv-embed"
-            height="52"
-            width="100%"
-            frameborder="0"
-            scrolling="no"
-            style="margin: 0; border-radius: 0px !important; background-color: transparent;"
-          ></iframe>
-        </div>
-        <button
-          class="border-[1px] hidden rounded-md py-3 px-5 bg-black text-white font-semibold shadow-sm w-[200px]"
-          >Download</button
-        >
+        <Button variant="default" className="bg-black text-white" asChild>
+          <a
+            href="https://github.com/Buxmann-Software-Solutions/achieve-alchemy/releases/download/v0.1.0/AchieveAlchemy_0.1.0.dmg"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download macOS App
+          </a>
+        </Button>
       </div>
       <div class="mt-2 space-x-2 items-center hidden">
         <FaGift />

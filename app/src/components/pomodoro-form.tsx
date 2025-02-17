@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { usePomodoro } from "@/stores/PomodoroContext";
+import { usePomodoro } from "@/contexts/PomodoroContext";
 
 const pomodoroPreferenceFormSchema = z.object({
   focusDuration: z.number().min(1, {

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "@/globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
-import { PomodoroProvider } from "@/stores/PomodoroContext";
+import { PomodoroProvider } from "@/contexts/PomodoroContext";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";

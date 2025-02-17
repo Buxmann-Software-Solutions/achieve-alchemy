@@ -1,7 +1,7 @@
 import {
   usePomodoro as usePomodoroContext,
   PomodoroMode,
-} from "../stores/PomodoroContext";
+} from "../contexts/PomodoroContext";
 import { toast } from "sonner";
 import { useCallback } from "react";
 import { useUpdateCycleStatus } from "./pomodoro/use-update-cycle-status";
