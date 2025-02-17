@@ -1,6 +1,7 @@
 ---
 import Logo from "@/components/Logo.astro";
 import config from "@/config/config.json";
+import { FaGithub } from "react-icons/fa6";
 
 export interface ChildNavigationLink {
   name: string;
@@ -29,9 +30,7 @@ const { settings } = config;
 const { pathname } = Astro.url;
 ---
 
-<header
-  class={`header max-w-7xl mx-auto z-30 bg-white ${settings.sticky_header && "sticky top-0"}`}
->
+<header class={`header max-w-7xl mx-auto z-30 bg-white`}>
   <nav class="flex py-4 justify-between items-center container">
     <!-- logo -->
     <div class="order-0">
@@ -61,11 +60,23 @@ const { pathname } = Astro.url;
         <a class="btn btn-outline-primary btn-sm" href="">Download</a>
       </li>
     </ul>
-    <div class="order-1 ml-auto items-center md:order-2 lg:ml-0 hidden sm:flex">
-     <a href="/#hero">
-     <button
-        class="border-[1px] rounded-md py-2 px-5 hover:bg-black hover:text-white font-semibold shadow-sm"
-        >Early Access
+    <div
+      class="order-1 ml-auto items-center md:order-2 lg:ml-0 hidden sm:flex gap-2"
+    >
+      <a
+        href="https://github.com/Buxmann-Software-Solutions/achieve-alchemy"
+        target="_blank"
+      >
+        <button
+          class="border-[1px] rounded-md py-3 px-5 hover:bg-black hover:text-white font-semibold shadow-sm"
+        >
+          <FaGithub />
+        </button>
+      </a>
+      <a href="/#hero">
+        <button
+          class="border-[1px] rounded-md py-2 px-5 hover:bg-black hover:text-white font-semibold shadow-sm"
+          >Early Access
         </button>
       </a>
     </div>
